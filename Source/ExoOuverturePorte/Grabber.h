@@ -49,4 +49,5 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void Grab();
 	void Release();
+	void Freeze();
 };
