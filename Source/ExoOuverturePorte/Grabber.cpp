@@ -145,6 +145,8 @@ void UGrabber::Grab()
 			NAME_None,
 			GetPlayersReach()
 		);
+		ComponentToGrab->SetSimulatePhysics(true);
+		isFreezed = false;
 	}
 }
 
