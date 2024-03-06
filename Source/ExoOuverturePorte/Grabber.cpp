@@ -47,6 +47,14 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		CurrentValueGrab += DeltaTime * SpeedGrabUse;
 	}
 
+	if (isFreezed == true) {
+		TimerFreeze -= DeltaTime;
+		if (TimerFreeze <= 0) {
+			ComponentToGrab->SetSimulatePhysics(true);
+			isFreezed = false;
+		}
+	}
+
 	//FMath::Clamp(CurrentValueGrab, 0.f, MaxValueGrab);
 }
 
@@ -60,7 +68,7 @@ void UGrabber::SetUpInputC()
 		UE_LOG(LogTemp, Warning, TEXT("InputComponent initialized"));
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
-		InputComponent->BindAction("Freeze", IE_Released, this, &UGrabber::Freeze);
+		InputComponent->BindAction("Freeze", IE_Pressed, this, &UGrabber::Freeze);
 	}
 }
 
@@ -125,11 +133,11 @@ void UGrabber::Grab()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Grab"));
 
-	auto HitResult = GetFirstPhysicsBodyInReach();
+	 HitResult = GetFirstPhysicsBodyInReach();
 
-	auto ComponentToGrab = HitResult.GetComponent();
+	 ComponentToGrab = HitResult.GetComponent();
 
-	auto ActorHit = HitResult.GetActor();
+	 ActorHit = HitResult.GetActor();
 
 	if (ActorHit) {
 		PhysicsHandleComponent->GrabComponentAtLocation(
@@ -137,6 +145,8 @@ void UGrabber::Grab()
 			NAME_None,
 			GetPlayersReach()
 		);
+		ComponentToGrab->SetSimulatePhysics(true);
+		isFreezed = false;
 	}
 }
 
@@ -149,12 +159,10 @@ void UGrabber::Release()
 
 void UGrabber::Freeze()
 {
-	auto HitResult = GetFirstPhysicsBodyInReach();
-
-	auto ComponentToGrab = HitResult.GetComponent();
-
-	auto ActorHit = HitResult.GetActor();
-
-	
+	UE_LOG(LogTemp, Warning, TEXT("Freeze"));
+	if (isFreezed == false) {
+		ComponentToGrab->SetSimulatePhysics(false);
+		isFreezed = true;
+	}
 }
 
