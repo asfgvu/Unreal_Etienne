@@ -47,6 +47,14 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		CurrentValueGrab += DeltaTime * SpeedGrabUse;
 	}
 
+	if (isFreezed) {
+		TimerFreeze -= DeltaTime;
+		if (TimerFreeze <= 0) {
+			ComponentToGrab->SetSimulatePhysics(true);
+			isFreezed = false;
+		}
+	}
+
 	//FMath::Clamp(CurrentValueGrab, 0.f, MaxValueGrab);
 }
 
@@ -149,6 +157,9 @@ void UGrabber::Release()
 
 void UGrabber::Freeze()
 {
-	ComponentToGrab->SetSimulatePhysics(false);
+	if (isFreezed == false) {
+		ComponentToGrab->SetSimulatePhysics(false);
+		isFreezed = true;
+	}
 }
 

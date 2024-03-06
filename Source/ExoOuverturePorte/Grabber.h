@@ -50,6 +50,9 @@ private:
 	UPrimitiveComponent* ComponentToGrab = nullptr;
 	AActor* ActorHit = nullptr;
 
+	bool isFreezed = false;
+	float TimerFreeze = 5.0f;
+
 	UFUNCTION(BlueprintCallable)
 	void Grab();
 	void Release();
