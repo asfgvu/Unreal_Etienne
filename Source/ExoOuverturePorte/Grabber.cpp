@@ -47,7 +47,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		CurrentValueGrab += DeltaTime * SpeedGrabUse;
 	}
 
-	if (isFreezed) {
+	if (isFreezed == true) {
 		TimerFreeze -= DeltaTime;
 		if (TimerFreeze <= 0) {
 			ComponentToGrab->SetSimulatePhysics(true);
@@ -157,6 +157,7 @@ void UGrabber::Release()
 
 void UGrabber::Freeze()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Freeze"));
 	if (isFreezed == false) {
 		ComponentToGrab->SetSimulatePhysics(false);
 		isFreezed = true;
