@@ -60,7 +60,7 @@ void UGrabber::SetUpInputC()
 		UE_LOG(LogTemp, Warning, TEXT("InputComponent initialized"));
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
-		InputComponent->BindAction("Freeze", IE_Released, this, &UGrabber::Freeze);
+		InputComponent->BindAction("Freeze", IE_Pressed, this, &UGrabber::Freeze);
 	}
 }
 
@@ -125,11 +125,11 @@ void UGrabber::Grab()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Grab"));
 
-	auto HitResult = GetFirstPhysicsBodyInReach();
+	 HitResult = GetFirstPhysicsBodyInReach();
 
-	auto ComponentToGrab = HitResult.GetComponent();
+	 ComponentToGrab = HitResult.GetComponent();
 
-	auto ActorHit = HitResult.GetActor();
+	 ActorHit = HitResult.GetActor();
 
 	if (ActorHit) {
 		PhysicsHandleComponent->GrabComponentAtLocation(
@@ -149,12 +149,6 @@ void UGrabber::Release()
 
 void UGrabber::Freeze()
 {
-	auto HitResult = GetFirstPhysicsBodyInReach();
-
-	auto ComponentToGrab = HitResult.GetComponent();
-
-	auto ActorHit = HitResult.GetActor();
-
-	
+	ComponentToGrab->SetSimulatePhysics(false);
 }
 

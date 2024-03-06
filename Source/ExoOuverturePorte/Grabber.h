@@ -46,6 +46,10 @@ private:
 
 	float SpeedGrabUse = 1.0f;
 
+	FHitResult HitResult;
+	UPrimitiveComponent* ComponentToGrab = nullptr;
+	AActor* ActorHit = nullptr;
+
 	UFUNCTION(BlueprintCallable)
 	void Grab();
 	void Release();
