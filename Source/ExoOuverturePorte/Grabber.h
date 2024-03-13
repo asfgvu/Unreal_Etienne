@@ -53,6 +53,10 @@ private:
 	bool isFreezed = false;
 	float TimerFreeze = 5.0f;
 
+	bool CanFreeze = false;
+	float MaxCooldownFreezeValue = 3.0f;
+	float CurrentCooldownFreezeValue;
+
 	UFUNCTION(BlueprintCallable)
 	void Grab();
 	void Release();
