@@ -46,3 +46,17 @@ le freeze + Quantifier le freeze + affichage des quêtes
 -------------------------------------------------------------------
 Semaine 2 : Lead : Adam
 
+- Nathan était absent
+- Adam a réalisé la mini-carte
+- Elsa n'a toujours pas réussi à télécharger le projet
+- Sacha a quantifié le grab, créé un système de quêtes, quantifié le gel, et a rencontré de gros problèmes de chargement de projets sur Unreal Engine
+
+
+À faire :
+
+- Corriger le bug du sprite de la mini-carte
+- Programmer le lancer d'objet
+- Peaufiner le système de quêtes avec un peu plus de Game Design
+
+
+Semaine 3 : Lead : Sacha
