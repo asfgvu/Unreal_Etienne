@@ -58,5 +58,9 @@ Semaine 2 : Lead : Adam
 - Programmer le lancer d'objet
 - Peaufiner le système de quêtes avec un peu plus de Game Design
 
-
+-------------------------------------------------------------------
 Semaine 3 : Lead : Sacha
+- Nathan est revenu
+- Nathan a des problemes pour lancer le projet
+- Elsa a des problemes de Unreal
+- Sacha doit retoucher a la quatification du gel et a corriger les problemes de quantifications du grab
