@@ -25,6 +25,9 @@ void UGrabber::BeginPlay()
 	FindAttachPhysicsHandle();
 	
 	CurrentValueGrab = MaxValueGrab;
+
+	CurrentCooldownFreezeValue = MaxCooldownFreezeValue;
+	CanFreeze = true;
 }
 
 
@@ -45,6 +48,14 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	else 
 	{
 		CurrentValueGrab += DeltaTime * SpeedGrabUse;
+	}
+
+	if (CanFreeze == false) {
+		CurrentCooldownFreezeValue -= DeltaTime;
+		if (CurrentCooldownFreezeValue <= 0) {
+			CurrentCooldownFreezeValue = MaxCooldownFreezeValue;
+			CanFreeze = true;
+		}
 	}
 
 	if (isFreezed == true) {
@@ -160,9 +171,10 @@ void UGrabber::Release()
 void UGrabber::Freeze()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Freeze"));
-	if (isFreezed == false) {
+	if (isFreezed == false && CanFreeze == true) {
 		ComponentToGrab->SetSimulatePhysics(false);
 		isFreezed = true;
+		CanFreeze = false;
 	}
 }
 
