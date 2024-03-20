@@ -57,8 +57,15 @@ private:
 	float MaxCooldownFreezeValue = 3.0f;
 	float CurrentCooldownFreezeValue;
 
+	bool IsEPressed = false;
+	bool IsRPressed = false;
+	bool IsLSPressed = false;
+
 	UFUNCTION(BlueprintCallable)
 	void Grab();
 	void Release();
 	void Freeze();
+	void RotateObjectRollPressed();
+	void RotateObjectYawPressed();
+	void ReverseRotationPressed();
 };
