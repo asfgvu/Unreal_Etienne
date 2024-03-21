@@ -29,6 +29,7 @@ protected:
 	FHitResult GetFirstPhysicsBodyInReach()const;
 	FVector GetPlayersReach() const;
 	FVector GetPlayersWorldPosition() const;
+	FRotator GetPlayersWorldRotation() const;
 
 public:	
 	// Called every frame
@@ -51,6 +52,8 @@ private:
 	UPrimitiveComponent* ComponentToGrab = nullptr;
 	AActor* ActorHit = nullptr;
 
+	FRotator ActorRotation;
+
 	bool isFreezed = false;
 	float TimerFreeze = 5.0f;
 
@@ -69,4 +72,5 @@ private:
 	void RotateObjectRollPressed();
 	void RotateObjectYawPressed();
 	void ReverseRotationPressed();
+	void Throw();
 };
