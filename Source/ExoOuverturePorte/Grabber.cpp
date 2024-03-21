@@ -80,6 +80,9 @@ void UGrabber::SetUpInputC()
 		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
 		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
 		InputComponent->BindAction("Freeze", IE_Pressed, this, &UGrabber::Freeze);
+		InputComponent->BindAction("RotateObjectRoll", IE_Pressed, this, &UGrabber::RotateObjectRollPressed);
+		InputComponent->BindAction("RotateObjectYaw", IE_Pressed, this, &UGrabber::RotateObjectYawPressed);
+		InputComponent->BindAction("InverseRotation", IE_Pressed, this, &UGrabber::ReverseRotationPressed);
 	}
 }
 
@@ -158,6 +161,7 @@ void UGrabber::Grab()
 		);
 		ComponentToGrab->SetSimulatePhysics(true);
 		isFreezed = false;
+		IsGrabbed = true;
 	}
 }
 
@@ -165,6 +169,7 @@ void UGrabber::Release()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Release"));
 	PhysicsHandleComponent->ReleaseComponent();
+	IsGrabbed = false;
 
 }
 
@@ -177,4 +182,27 @@ void UGrabber::Freeze()
 		CanFreeze = false;
 	}
 }
+
+void UGrabber::RotateObjectRollPressed()
+{
+	UE_LOG(LogTemp, Warning, TEXT("E Pressed"));
+
+	if (IsGrabbed) {
+		FRotator ActorRotation = ActorHit->GetActorRotation();
+		FRotator NewActorRotation(ActorRotation.Roll + 45.0f, ActorRotation.Pitch, ActorRotation.Yaw);
+		ActorHit->SetActorRotation(NewActorRotation);
+	}
+}
+
+void UGrabber::RotateObjectYawPressed()
+{
+	IsRPressed = true;
+}
+
+void UGrabber::ReverseRotationPressed()
+{
+	IsLSPressed = true;
+}
+
+
 
