@@ -161,6 +161,7 @@ void UGrabber::Grab()
 		);
 		ComponentToGrab->SetSimulatePhysics(true);
 		isFreezed = false;
+		IsGrabbed = true;
 	}
 }
 
@@ -168,6 +169,7 @@ void UGrabber::Release()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Release"));
 	PhysicsHandleComponent->ReleaseComponent();
+	IsGrabbed = false;
 
 }
 
@@ -184,9 +186,12 @@ void UGrabber::Freeze()
 void UGrabber::RotateObjectRollPressed()
 {
 	UE_LOG(LogTemp, Warning, TEXT("E Pressed"));
-	FRotator ActorRotation = ActorHit->GetActorRotation();
-	FRotator NewActorRotation(ActorRotation.Roll + 45.0f, ActorRotation.Pitch, ActorRotation.Yaw);
-	ActorHit->SetActorRotation(NewActorRotation);
+
+	if (IsGrabbed) {
+		FRotator ActorRotation = ActorHit->GetActorRotation();
+		FRotator NewActorRotation(ActorRotation.Roll + 45.0f, ActorRotation.Pitch, ActorRotation.Yaw);
+		ActorHit->SetActorRotation(NewActorRotation);
+	}
 }
 
 void UGrabber::RotateObjectYawPressed()

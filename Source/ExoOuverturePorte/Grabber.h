@@ -45,6 +45,7 @@ private:
 	float CurrentValueGrab = 0.0f;
 
 	float SpeedGrabUse = 1.0f;
+	bool IsGrabbed = false;
 
 	FHitResult HitResult;
 	UPrimitiveComponent* ComponentToGrab = nullptr;
