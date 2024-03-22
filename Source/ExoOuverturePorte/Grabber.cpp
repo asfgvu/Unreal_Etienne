@@ -28,6 +28,9 @@ void UGrabber::BeginPlay()
 
 	CurrentCooldownFreezeValue = MaxCooldownFreezeValue;
 	CanFreeze = true;
+
+	ActorHasTag = false;
+	TagToSearch = "Chaise";
 }
 
 
@@ -44,6 +47,10 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		CurrentValueGrab -= DeltaTime * SpeedGrabUse;
 		// Move the object that we are currently holding
 		PhysicsHandleComponent->SetTargetLocation(GetPlayersReach());
+
+		if (CurrentValueGrab <= 0) {
+			PhysicsHandleComponent->ReleaseComponent();
+		}
 	}
 	else 
 	{
@@ -156,6 +163,11 @@ float UGrabber::GetValueUI()
 	return CurrentValueGrab / MaxValueGrab;
 }
 
+bool UGrabber::GetObjectQuestGrab()
+{
+	return ActorHasTag;
+}
+
 void UGrabber::Grab()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Grab"));
@@ -166,7 +178,7 @@ void UGrabber::Grab()
 
 	 ActorHit = HitResult.GetActor();
 
-	if (ActorHit) {
+	if (ActorHit && CurrentValueGrab > 0) {
 		PhysicsHandleComponent->GrabComponentAtLocation(
 			ComponentToGrab,
 			NAME_None,
@@ -182,6 +194,10 @@ void UGrabber::Grab()
 		ComponentToGrab->SetSimulatePhysics(true);
 		isFreezed = false;
 		IsGrabbed = true;
+
+		if (ActorHit->ActorHasTag(TagToSearch)) {
+			ActorHasTag = true;
+		}
 	}
 }
 

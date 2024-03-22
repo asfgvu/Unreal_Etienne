@@ -19,6 +19,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float GetValueUI();
+	UFUNCTION(BlueprintCallable)
+	bool GetObjectQuestGrab();
 
 protected:
 	// Called when the game starts
@@ -64,6 +66,9 @@ private:
 	bool IsEPressed = false;
 	bool IsRPressed = false;
 	bool IsLSPressed = false;
+
+	bool ActorHasTag = false;
+	FName TagToSearch;
 
 	UFUNCTION(BlueprintCallable)
 	void Grab();
