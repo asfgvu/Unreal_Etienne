@@ -28,6 +28,9 @@ void UGrabber::BeginPlay()
 
 	CurrentCooldownFreezeValue = MaxCooldownFreezeValue;
 	CanFreeze = true;
+
+	ActorHasTag = false;
+	TagToSearch = "Chaise";
 }
 
 
@@ -44,6 +47,10 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		CurrentValueGrab -= DeltaTime * SpeedGrabUse;
 		// Move the object that we are currently holding
 		PhysicsHandleComponent->SetTargetLocation(GetPlayersReach());
+
+		if (CurrentValueGrab <= 0) {
+			PhysicsHandleComponent->ReleaseComponent();
+		}
 	}
 	else 
 	{
@@ -83,6 +90,7 @@ void UGrabber::SetUpInputC()
 		InputComponent->BindAction("RotateObjectRoll", IE_Pressed, this, &UGrabber::RotateObjectRollPressed);
 		InputComponent->BindAction("RotateObjectYaw", IE_Pressed, this, &UGrabber::RotateObjectYawPressed);
 		InputComponent->BindAction("InverseRotation", IE_Pressed, this, &UGrabber::ReverseRotationPressed);
+		InputComponent->BindAction("Throw", IE_Pressed, this, &UGrabber::Throw);
 	}
 }
 
@@ -136,11 +144,28 @@ FVector UGrabber::GetPlayersWorldPosition() const
 	return PlayerViewPointLocation;
 }
 
+FRotator UGrabber::GetPlayersWorldRotation() const
+{
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint
+	(
+		PlayerViewPointLocation,
+		PlayerViewPointRotation
+	);
+	return PlayerViewPointRotation;
+}
+
 
 
 float UGrabber::GetValueUI()
 {
 	return CurrentValueGrab / MaxValueGrab;
+}
+
+bool UGrabber::GetObjectQuestGrab()
+{
+	return ActorHasTag;
 }
 
 void UGrabber::Grab()
@@ -153,15 +178,26 @@ void UGrabber::Grab()
 
 	 ActorHit = HitResult.GetActor();
 
-	if (ActorHit) {
+	if (ActorHit && CurrentValueGrab > 0) {
 		PhysicsHandleComponent->GrabComponentAtLocation(
 			ComponentToGrab,
 			NAME_None,
 			GetPlayersReach()
 		);
+
+		/*PhysicsHandleComponent->GrabComponentAtLocationWithRotation(
+			ComponentToGrab,
+			NAME_None,
+			GetPlayersReach(),
+			ActorHit->GetActorRotation()
+		);*/
 		ComponentToGrab->SetSimulatePhysics(true);
 		isFreezed = false;
 		IsGrabbed = true;
+
+		if (ActorHit->ActorHasTag(TagToSearch)) {
+			ActorHasTag = true;
+		}
 	}
 }
 
@@ -188,20 +224,48 @@ void UGrabber::RotateObjectRollPressed()
 	UE_LOG(LogTemp, Warning, TEXT("E Pressed"));
 
 	if (IsGrabbed) {
-		FRotator ActorRotation = ActorHit->GetActorRotation();
-		FRotator NewActorRotation(ActorRotation.Roll + 45.0f, ActorRotation.Pitch, ActorRotation.Yaw);
-		ActorHit->SetActorRotation(NewActorRotation);
+		/*FRotator ActorRotation = ActorHit->GetActorRotation();
+		FRotator NewActorRotation(0.f, 45.f, 0.f);
+		ActorRotation += NewActorRotation;*/
+		ComponentToGrab->SetSimulatePhysics(false);
+		FRotator NewRotation = ActorHit->GetActorRotation().Add(0.f, 45.f, 0.f);
+		ActorHit->SetActorRotation(NewRotation);
+		ComponentToGrab->SetSimulatePhysics(true);
 	}
 }
 
 void UGrabber::RotateObjectYawPressed()
 {
-	IsRPressed = true;
+	UE_LOG(LogTemp, Warning, TEXT("R Pressed"));
+	if (IsGrabbed) {
+		ComponentToGrab->SetSimulatePhysics(false);
+		FRotator NewRotation = ActorHit->GetActorRotation().Add(0.f, 0.f, 45.f);
+		ActorHit->SetActorRotation(NewRotation);
+		ComponentToGrab->SetSimulatePhysics(true);
+	}
 }
 
 void UGrabber::ReverseRotationPressed()
 {
 	IsLSPressed = true;
+}
+
+void UGrabber::Throw()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Left Mouse Pressed"));
+	if (IsGrabbed) {
+		PhysicsHandleComponent->ReleaseComponent();
+
+		APlayerCameraManager* PlayerCamera = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+		FRotator CameraRot = PlayerCamera->GetCameraRotation();
+		FVector CameraForward = CameraRot.Vector();
+		/// (Using player's forward vector to determine direction of throw).
+		ComponentToGrab->AddImpulse(
+			CameraForward * 1000,
+			NAME_None, /// No bone names for specific  objects.
+			true /// Makes sure that mass is immaterial to the force.
+		);
+	}
 }
 
 
