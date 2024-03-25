@@ -19,6 +19,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float GetValueUI();
+	UFUNCTION(BlueprintCallable)
+	bool GetObjectQuestGrab();
 
 protected:
 	// Called when the game starts
@@ -29,6 +31,7 @@ protected:
 	FHitResult GetFirstPhysicsBodyInReach()const;
 	FVector GetPlayersReach() const;
 	FVector GetPlayersWorldPosition() const;
+	FRotator GetPlayersWorldRotation() const;
 
 public:	
 	// Called every frame
@@ -45,9 +48,34 @@ private:
 	float CurrentValueGrab = 0.0f;
 
 	float SpeedGrabUse = 1.0f;
+	bool IsGrabbed = false;
+
+	FHitResult HitResult;
+	UPrimitiveComponent* ComponentToGrab = nullptr;
+	AActor* ActorHit = nullptr;
+
+	FRotator ActorRotation;
+
+	bool isFreezed = false;
+	float TimerFreeze = 5.0f;
+
+	bool CanFreeze = false;
+	float MaxCooldownFreezeValue = 3.0f;
+	float CurrentCooldownFreezeValue;
+
+	bool IsEPressed = false;
+	bool IsRPressed = false;
+	bool IsLSPressed = false;
+
+	bool ActorHasTag = false;
+	FName TagToSearch;
 
 	UFUNCTION(BlueprintCallable)
 	void Grab();
 	void Release();
 	void Freeze();
+	void RotateObjectRollPressed();
+	void RotateObjectYawPressed();
+	void ReverseRotationPressed();
+	void Throw();
 };
