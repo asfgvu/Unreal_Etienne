@@ -19,16 +19,16 @@ void UPositionReport::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Get Owner of this scritps
-	GetOwner();
-	//Get the name of the owner in the scene
-	FString OwnName = GetOwner()->GetActorLabel();
-	//Get position of the owner
-	FString OwnLocation = GetOwner()->GetActorLocation().ToString();
-	FString OwnRotation = GetOwner()->GetActorRotation().ToString();
+	////Get Owner of this scritps
+	//GetOwner();
+	////Get the name of the owner in the scene
+	//FString OwnName = GetOwner()->GetActorLabel();
+	////Get position of the owner
+	//FString OwnLocation = GetOwner()->GetActorLocation().ToString();
+	//FString OwnRotation = GetOwner()->GetActorRotation().ToString();
 
-	UE_LOG(LogTemp, Warning, TEXT("%s is at %s and rotation %s"), *OwnName, *OwnLocation, *OwnRotation);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White , FString::Printf(TEXT("%s is at %s and rotation %s"), *OwnName, *OwnLocation, *OwnRotation));
+	//UE_LOG(LogTemp, Warning, TEXT("%s is at %s and rotation %s"), *OwnName, *OwnLocation, *OwnRotation);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White , FString::Printf(TEXT("%s is at %s and rotation %s"), *OwnName, *OwnLocation, *OwnRotation));
 	// ...
 	
 }
