@@ -70,6 +70,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		if (TimerFreeze <= 0) {
 			ComponentToGrab->SetSimulatePhysics(true);
 			isFreezed = false;
+			TimerFreeze = 5.f;
 		}
 	}
 
